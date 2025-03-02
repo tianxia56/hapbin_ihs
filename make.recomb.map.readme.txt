@@ -1,0 +1,34 @@
+#qc
+module load BCFtools/1.11-GCC-10.2.0
+#
+module load VCFtools/0.1.16-GCCcore-10.2.0
+#######################################################################
+#run smc++ Ne
+#######################################################################
+#phased vcf to smc on multiple individual
+#need activate smc++
+#smc++ vcf2smc -c 1000 ${POP_NAME}.chr${CHR}.vcf.gz $OUT_FILE ${CHR} $POP_NAME:$IND_LIST
+
+``extract_pop_data.sh``
+
+#run smc++ estimate Ne history: model.final.json
+smc++ estimate -o analysis_IND/ 1.25e-8 out/IND.chr*.smc.gz
+smc++ estimate -o analysis_MGN/ 1.25e-8 out/MGN.chr*.smc.gz
+smc++ estimate -o analysis_SASI/ 1.25e-8 out/SASI.chr*.smc.gz
+smc++ estimate -o analysis_SASP/ 1.25e-8 out/SASP.chr*.smc.gz
+
+#plot and convert json to csv
+
+``cd analysis_IND``
+
+``smc++ plot IND.png --csv model.final.json``
+
+``plot.all.demo.py``
+
+#######################################################################
+#run pyrho
+#######################################################################
+#input csv to recomb map
+
+``submit_all_pyrho.sh``
+
